@@ -18,7 +18,13 @@ router = APIRouter(tags=["web"])
 
 db_dependency = Annotated[Session, Depends(get_db)]
 templates = Jinja2Templates(directory="templates")
+# login_dependency = Annotated[Request, Depends(get_current_user)]
 
+# async def user_login(request, return_url = '/login'):
+#     user_dict = await get_current_user(request=request)
+#     if user_dict is None:
+#          return RedirectResponse(url= return_url, status_code=status.HTTP_302_FOUND)
+#     return
 
 @router.get('/home', response_class=HTMLResponse)
 async def HomePage(request: Request, db: db_dependency):
@@ -27,16 +33,20 @@ async def HomePage(request: Request, db: db_dependency):
          return RedirectResponse(url='/login', status_code=status.HTTP_302_FOUND)
     todo = db.query(models.Todo).filter(models.Todo.owner == user_dict.get('id')).all()
 
-    return templates.TemplateResponse("home.html", {"request": request, "todo":todo})
+    return templates.TemplateResponse("home.html", {"request": request, "todo":todo, 'user':user_dict})
 
 
 @router.get('/add_todo', response_class=HTMLResponse)
 async def AddTodo(request: Request):
-    return templates.TemplateResponse("add_todo.html", {"request": request})
+    user_dict = await get_current_user(request=request)
+    return templates.TemplateResponse("add_todo.html", {"request": request, 'user':user_dict})
 
 @router.post('/add_todo', response_class=HTMLResponse)
 async def CreateTodo(request: Request, db:db_dependency, title: str= Form(...), description: str= Form(...), 
                                 priority: int = Form(...)):
+    user_dict = await get_current_user(request=request)
+    if user_dict is None:
+         return RedirectResponse(url='/login', status_code=status.HTTP_302_FOUND)
     
     
     todo_model = models.Todo()
@@ -44,7 +54,7 @@ async def CreateTodo(request: Request, db:db_dependency, title: str= Form(...), 
     todo_model.title = title
     todo_model.description = description
     todo_model.priority = priority
-    todo_model.owner = "01HBYCH1DAWS1SA4J1P9KBEV4C"
+    todo_model.owner = user_dict.get('id')
 
     db.add(todo_model)
     db.commit()
@@ -53,8 +63,11 @@ async def CreateTodo(request: Request, db:db_dependency, title: str= Form(...), 
 
 @router.get('/edit_todo/{todo_id}', response_class=HTMLResponse)
 async def EditTodo(request: Request, todo_id : str, db:db_dependency):
+    user_dict = await get_current_user(request=request)
+    if user_dict is None:
+         return RedirectResponse(url='/login', status_code=status.HTTP_302_FOUND)
     todo = db.query(models.Todo).filter(models.Todo.id == todo_id).first()
-    return templates.TemplateResponse("edit_todo.html", {"request": request, 'todo':todo})
+    return templates.TemplateResponse("edit_todo.html", {"request": request, 'todo':todo, 'user':user_dict})
 
 
 

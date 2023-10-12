@@ -1,11 +1,8 @@
 from fastapi import APIRouter, Depends, status
 from fastapi.templating import Jinja2Templates
 from pydantic import BaseModel
-from src.schema import CreateUserPassword, CreateUserRequest
 from src import get_db
 from src.models import User
-from ulid import ulid
-from fastapi.encoders import jsonable_encoder
 from passlib.context import CryptContext
 from fastapi.security import  OAuth2PasswordRequestForm, OAuth2PasswordBearer
 from typing import Annotated
@@ -127,4 +124,13 @@ async def Login(request: Request, db:db_dependency):
     except HTTPException:
         msg ="unknown error"
         return templates.TemplateResponse('login.html',{"request":request, "msg":msg})
+    
+
+@router.get('/logout')
+async def Logout(request: Request):
+    msg = 'Logout Successful'
+    response = templates.TemplateResponse('login.html',{"request":request, "msg":msg})
+    response.delete_cookie(key="access_token")
+    return response
+
     
