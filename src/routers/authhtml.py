@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, status
+from fastapi import APIRouter, Depends, status, Form
 from fastapi.templating import Jinja2Templates
 from pydantic import BaseModel
 from src import get_db
@@ -14,7 +14,9 @@ from fastapi.exceptions import HTTPException
 from fastapi.requests import Request
 from fastapi.responses import HTMLResponse, RedirectResponse, Response
 from typing import Optional
+from src import models
 import sys
+from ulid import ulid
 sys.path.append("..")
 
 
@@ -133,4 +135,35 @@ async def Logout(request: Request):
     response.delete_cookie(key="access_token")
     return response
 
+
+@router.get("/register")
+async def Register(request: Request):
+    return templates.TemplateResponse('register.html',{"request":request})
+
+@router.post('/register')
+async def Register(request: Request, db: db_dependency, email: str = Form(...), username: str = Form(...), 
+                    firstname: str = Form(...),  lastname: str = Form(...) , password1 : str = Form(...), 
+                    password2 : str = Form(...)) :
+    validation1 = db.query(models.User).filter(models.User.username == username).first()
+    validation2 = db.query(models.User).filter(models.User.email == email).first()
+
+    if (password1 != password2) or (validation2 != None) or  (validation1 != None):
+        msg = "invalid registration request"
+        return templates.TemplateResponse('register.html',{"request":request})
+    
+    
+    user_model = models.User(id= ulid(), username=username, email=email, hashed_password= bycrpt_context.hash(password1),
+                             firstname=firstname, lastname=lastname, is_active=True, role='user')
+    db.add(user_model)
+    db.commit()
+    msg ="registration successful"
+
+    return templates.TemplateResponse('login.html',{"request":request, "msg":msg})
+
+
+
+
+
+    
+    
     

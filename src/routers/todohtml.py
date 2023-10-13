@@ -18,13 +18,7 @@ router = APIRouter(tags=["web"])
 
 db_dependency = Annotated[Session, Depends(get_db)]
 templates = Jinja2Templates(directory="templates")
-# login_dependency = Annotated[Request, Depends(get_current_user)]
 
-# async def user_login(request, return_url = '/login'):
-#     user_dict = await get_current_user(request=request)
-#     if user_dict is None:
-#          return RedirectResponse(url= return_url, status_code=status.HTTP_302_FOUND)
-#     return
 
 @router.get('/home', response_class=HTMLResponse)
 async def HomePage(request: Request, db: db_dependency):
