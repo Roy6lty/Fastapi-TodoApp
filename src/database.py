@@ -1,9 +1,10 @@
 from sqlalchemy.engine import create_engine
 from sqlalchemy.orm import  sessionmaker, declarative_base
+from .config import Config
 
-SQLALCHEMY_DATABASE_URI = "sqlite:///todo.db"
+# SQLALCHEMY_DATABASE_URI = "sqlite:///todo.db"
 
-engine = create_engine(SQLALCHEMY_DATABASE_URI, connect_args= {"check_same_thread":False})
+engine = create_engine(Config.SQLALCHEMY_DATABASE_URI, connect_args= {"check_same_thread":False})
 
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 

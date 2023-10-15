@@ -17,7 +17,7 @@ def get_db():
         db.close()
 
 db_dependency =  Annotated[Session, Depends(get_db)]        
-from src.routers import todo, auth, admin, userprofile,todohtml, authhtml
+from src.routers import todo, auth, admin, userprofile,todohtml, authhtml,mail
 
 
 
@@ -28,4 +28,6 @@ app.include_router(admin.router)
 app.include_router(userprofile.router)
 app.include_router(todohtml.router)
 app.include_router(authhtml.router)
+app.include_router(mail.router)
+
 app.mount("/static", StaticFiles(directory="static"),name="static") 

@@ -15,9 +15,8 @@ from fastapi.requests import Request
 from fastapi.responses import HTMLResponse, RedirectResponse, Response
 from typing import Optional
 from src import models
-import sys
+from ..config import Config
 from ulid import ulid
-sys.path.append("..")
 
 
 
@@ -27,7 +26,7 @@ templates = Jinja2Templates(directory="templates")
 
 router = APIRouter(tags =["web"])
 
-SECRET_KEY = "hhiffs3ad74a2d46s7v897c55g43j2jfg"
+
 ALGORITHIM = 'HS256'
 
 class Token(BaseModel):
@@ -73,14 +72,14 @@ def CreateAccessToken(username: str, user_id: str, user_role:str, expires_delta:
     encode = {"sub": username, "id": user_id, "role":user_role}
     expires = datetime.utcnow() +  expires_delta
     encode.update({"exp": expires})
-    return jwt.encode(encode, SECRET_KEY, algorithm=ALGORITHIM)
+    return jwt.encode(encode, Config.SECRET_KEY, algorithm=ALGORITHIM)
 
 async def get_current_user(request: Request):
     try:
         token = request.cookies.get('access_token')
         if token is None:
             return None
-        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHIM])
+        payload = jwt.decode(token, Config.SECRET_KEY, algorithms=[ALGORITHIM])
         username: str = payload.get("sub")
         id: str = payload.get("id")
         role: str = payload.get("role")

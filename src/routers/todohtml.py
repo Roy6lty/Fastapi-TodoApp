@@ -12,6 +12,7 @@ from src import models
 from ulid import ulid
 from typing import Optional
 from . import authhtml
+from src.celery import countdown 
 
 
 router = APIRouter(tags=["web"])
@@ -26,6 +27,7 @@ async def HomePage(request: Request, db: db_dependency):
     if user_dict is None:
          return RedirectResponse(url='/login', status_code=status.HTTP_302_FOUND)
     todo = db.query(models.Todo).filter(models.Todo.owner == user_dict.get('id')).all()
+    countdown.delay(10)
 
     return templates.TemplateResponse("home.html", {"request": request, "todo":todo, 'user':user_dict})
 
