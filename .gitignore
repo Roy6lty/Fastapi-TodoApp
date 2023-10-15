@@ -167,3 +167,4 @@ cython_debug/
 /emall/
 /Dockerfile
 /docker-compose.yaml
+per.env
