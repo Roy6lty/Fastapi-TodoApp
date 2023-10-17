@@ -21,45 +21,6 @@ This project uses the fastapi framework to build a todoapp
 │       │   └── bb6e9aac48f5_create_phone_number_for_user_column_py.cpython-310.pyc
 │       └── bb6e9aac48f5_create_phone_number_for_user_column_py.py
 ├── alembic.ini
-├── con.py
-├── docker-compose.yaml
-├── emall
-│   └── python_fastapi
-│       ├── Makefile
-│       ├── alembic
-│       │   ├── README
-│       │   ├── env.py
-│       │   ├── script.py.mako
-│       │   └── versions
-│       │       ├── 15770e820938_created_users_table.py
-│       │       ├── 1c7984990e1d_created_posts_table.py
-│       │       ├── 39256113e8e5_added_verification_code.py
-│       │       └── 4917da928a79_added_post_table.py
-│       ├── alembic.ini
-│       ├── app
-│       │   ├── __init__.py
-│       │   ├── config.py
-│       │   ├── database.py
-│       │   ├── email.py
-│       │   ├── main.py
-│       │   ├── models.py
-│       │   ├── oauth2.py
-│       │   ├── routers
-│       │   │   ├── auth.py
-│       │   │   ├── post.py
-│       │   │   └── user.py
-│       │   ├── schemas.py
-│       │   ├── templates
-│       │   │   ├── _styles.html
-│       │   │   ├── base.html
-│       │   │   └── verification.html
-│       │   └── utils.py
-│       ├── docker-compose.yml
-│       ├── readMe.md
-│       └── requirements.txt
-├── readme.md
-├── requirements.txt
-├── run.py
 ├── src
 │   ├── __init__.py
 │   ├── __pycache__
@@ -117,3 +78,6 @@ This project uses the fastapi framework to build a todoapp
 │   └── verification.html
 └── todo.db
 ```
+
+![alt text](https://github.com/[olowoleru06@gmil.com]/[Fastapi-TodoApp]/blob/[main]/edit.png?raw=true)
+![Alt text](./static/todo/todo-img/edit.png?raw=true "edit Todo")
