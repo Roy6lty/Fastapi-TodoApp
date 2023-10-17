@@ -79,5 +79,11 @@ This project uses the fastapi framework to build a todoapp
 └── todo.db
 ```
 
-![alt text](https://github.com/[olowoleru06@gmil.com]/[Fastapi-TodoApp]/blob/[main]/edit.png?raw=true)
+
 ![Alt text](./static/todo/todo-img/edit.png?raw=true "edit Todo")
+
+![Alt text](./static/todo/todo-img/login.png?raw=true "edit Todo")
+
+![Alt text](./static/todo/todo-img/logout.png?raw=true "edit Todo")
+
+![Alt text](./static/todo/todo-img/registration.png?raw=true "edit Todo")
