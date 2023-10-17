@@ -1,5 +1,5 @@
 from fastapi import FastAPI, Depends
-from src import models
+from src import mail, models
 from .database import engine, SessionLocal
 from typing import Annotated
 from sqlalchemy.orm import Session
@@ -17,9 +17,9 @@ def get_db():
         db.close()
 
 db_dependency =  Annotated[Session, Depends(get_db)]        
-from src.routers import todo, auth, admin, userprofile,todohtml, authhtml,mail
+from src.routers import todo, auth, admin, userprofile,todohtml, authhtml
 
-
+from src import mail
 
 app = FastAPI()
 app.include_router(todo.router)

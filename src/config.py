@@ -17,3 +17,4 @@ class Config:
   MAIL_SSL_TLS = True
   USE_CREDENTIALS = True
   VALIDATE_CERTS = True
+

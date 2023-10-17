@@ -17,6 +17,7 @@ from typing import Optional
 from src import models
 from ..config import Config
 from ulid import ulid
+from src.mail import VerficationEmail, SendEmail
 
 
 
@@ -32,13 +33,6 @@ ALGORITHIM = 'HS256'
 class Token(BaseModel):
     access_token: str
     token_type: str
-
-
-
-
-
-
-
 
 bycrpt_context= CryptContext(schemes=['bcrypt'], deprecated= 'auto')
 oauth_scheme = OAuth2PasswordBearer(tokenUrl="token")
@@ -67,6 +61,12 @@ def AuthenticateUser(username:str, password:str, db:db_dependency):
     if not bycrpt_context.verify(password, user.hashed_password):
         return False
     return user
+
+def CreateVerificationToken(expires_delta: timedelta, username:str):
+    expires = datetime.utcnow() + expires_delta
+    encode = {"username": username, "exp": expires}
+    token = jwt.encode(encode, Config.SECRET_KEY, algorithm=ALGORITHIM)
+    return token 
 
 def CreateAccessToken(username: str, user_id: str, user_role:str, expires_delta: timedelta):
     encode = {"sub": username, "id": user_id, "role":user_role}
@@ -146,7 +146,7 @@ async def Register(request: Request, db: db_dependency, email: str = Form(...), 
     validation1 = db.query(models.User).filter(models.User.username == username).first()
     validation2 = db.query(models.User).filter(models.User.email == email).first()
 
-    if (password1 != password2) or (validation2 != None) or  (validation1 != None):
+    if (password1 != password2) or (validation2.email != None) or  (validation1.username != None):
         msg = "invalid registration request"
         return templates.TemplateResponse('register.html',{"request":request})
     
@@ -155,10 +155,34 @@ async def Register(request: Request, db: db_dependency, email: str = Form(...), 
                              firstname=firstname, lastname=lastname, is_active=True, role='user')
     db.add(user_model)
     db.commit()
-    msg ="registration successful"
+    msg ="Registration successful"
+
+    token = CreateVerificationToken(timedelta(minutes=5),username=username)
+    verify = VerficationEmail( url=token, recipient=email, username=firstname)
+    await SendEmail.sendemail(verify)
+    
+
 
     return templates.TemplateResponse('login.html',{"request":request, "msg":msg})
 
+@router.get('/verification/email/{token}')
+async def EmailVerfication(request: Request, token:str, db:db_dependency):
+    try:
+        payload = jwt.decode(token, Config.SECRET_KEY, algorithms=[ALGORITHIM])
+    except JWTError:
+        msg = "jwyd"
+        return templates.TemplateResponse('login.html',{"request":request, "msg":msg})
+    
+    username = payload.get("username") 
+    usernamedb = db.query(User).filter(User.username == username).first()
+   
+    
+    if username == usernamedb.username:
+        msg = "Account Verified"
+    else : msg = "Account Could not be Verified"
+    return templates.TemplateResponse('login.html',{"request":request, "msg":msg})
+        
+   
 
 
 
