@@ -80,10 +80,6 @@ This project uses the fastapi framework to build a todoapp
 ```
 
 
-![Alt text](./static/todo/todo-img/edit.png?raw=true "edit Todo")
+![Alt text](./static/todo/todo-img/edit.png?raw=true "edit Todo")  ![Alt text](./static/todo/todo-img/login.png?raw=true "edit Todo")
 
-![Alt text](./static/todo/todo-img/login.png?raw=true "edit Todo")
-
-![Alt text](./static/todo/todo-img/logout.png?raw=true "edit Todo")
-
-![Alt text](./static/todo/todo-img/registration.png?raw=true "edit Todo")
+![Alt text](./static/todo/todo-img/logout.png?raw=true "edit Todo") ![Alt text](./static/todo/todo-img/registration.png?raw=true "edit Todo")
