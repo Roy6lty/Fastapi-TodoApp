@@ -1,7 +1,22 @@
 # Description
-This project uses the fastapi framework to build a todoapp 
+This project uses the fastAPI framework to build a todo app 
 
-# features
+# Project Description
+The goal of this project is to develop a RESTful API for a todo application using FastAPI. The API will allow users to create, read, update, and delete tasks. The API will be developed using Python and FastAPI, and will use SQLite as the database. The API will be tested using Pytest and coverage.py.
+
+# Project Objectives
+- Design and develop a RESTful API using FastAPI
+- Use SQLite as the database for storing tasks
+- Implement CRUD operations for tasks
+- Test the API using Pytest and coverage.py
+
+# Project Deliverables
+- A GitHub repository containing the source code for the API
+- A detailed README file explaining how to run the API locally and how to deploy it on Heroku
+- A report summarizing the project objectives, methodology, results, and conclusions
+
+
+# Features
 - Task Addition
 - Task Removal
 - Email Notification of changes
